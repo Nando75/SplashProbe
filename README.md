@@ -1,7 +1,7 @@
 # 🌊 Splash Probe
 
 <p align="center">
-  <img src="docs/SplashProbe2.png" alt="Splash Probe Device" width="600">
+  <img src="docs/SpashProbe2.png" alt="Splash Probe Device" width="600">
 </p>
 
 **Splash Probe** is an open-source, floating smart sensor designed for swimming pools. It measures both ambient outdoor air temperature and water temperature while adding an aesthetic touch with customizable underwater light effects.
