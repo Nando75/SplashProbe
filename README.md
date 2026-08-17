@@ -1,5 +1,3 @@
-# 🌊 Splash Probe
-
 <p align="center">
   <img src="docs/SpashProbe2.png" alt="Splash Probe Device" width="600">
 </p>
@@ -27,6 +25,10 @@
 ## ⚙️ How It Works (Duty Cycle)
 
 To maximize battery efficiency, the device operates on a timed deep-sleep schedule:
+<p align="center">
+  <img src="docs/SpashProbe3.png" alt="Splash Probe Low Power" width="600">
+</p>
+
 
 1. **Every 5 minutes:** The device wakes up, turns on the 12-LED NeoPixel ring to perform a light effect, and returns to **Deep Sleep**.
 2. **Every 30 minutes (6 light cycles):** The device performs a full system check:
@@ -49,17 +51,6 @@ To maximize battery efficiency, the device operates on a timed deep-sleep schedu
 | **Deep Sleep Current** | ~35 µA |
 | **Active Current** | ~18 mA |
 | **Estimated Battery Life**| 3 to 5 months (depending on light patterns) |
-
----
-
-## 📸 Media & Placeholders
-
-<p align="center">
-  <img src="docs/assembly-overview.png" alt="Assembly Overview" width="450">
-  <img src="docs/underwater-light.png" alt="Underwater LED Effect" width="450">
-</p>
-
-*(Placeholders: Add photos of the assembled inner circuit and the device floating at night in a pool)*
 
 ---
 
