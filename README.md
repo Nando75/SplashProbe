@@ -103,7 +103,7 @@ Text labels displayed on the e-Paper screen can be customized or extended in `sy
 inline const char* airText[]   = {"ARIA", "AIR", "AIRE"};
 inline const char* waterText[] = {"ACQUA", "WATER", "AGUA"};
 inline const char* lowBatt[]   = {"Batteria Scarica", "Low Battery", "Batería baja"};
-
+```
 ---
 
 ## 🤝 Contributing
