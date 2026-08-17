@@ -77,6 +77,35 @@ The 3D printable enclosure is designed to be fully buoyant and watertight.
 
 ---
 
+## 💻 Firmware & Architecture
+
+The board operates using a **Finite State Machine (FSM)** architecture. To minimize power consumption, it spends most of its time in a **Deep Sleep** state:
+
+* **Every 5 minutes:** A hardware timer wakes the board up to execute the NeoPixel LED light sequence.
+* **Every 30 minutes (6 light cycles):** The system reads the temperature sensors, measures battery status, and updates the e-Paper display.
+
+The main logical flow is straightforward and can be inspected in `main.h`.
+
+### ⚙️ Configuration (`sys.h`)
+
+All core system parameters and PIN configurations are managed inside `sys.h`:
+
+- **Debug Mode:** `inline bool debug = true;` — Output status messages to the Serial console. Set to `false` for production/release builds to save power.
+- **Localization & Units:** `inline Language Lang = en;` / `inline DataMode dataMode = Celsius;` — Sets the preferred language (**English `en`**, **Italian `it`**, or **Spanish `es`**) and temperature unit (**Celsius** or **Fahrenheit**).
+- **Sleep Timer:** `inline const uint32_t SLEEP_DURATION_MS = 5 * 60 * 1000UL;` — Controls the 5-minute interval between wake-ups to run the LED sequence.
+- **Sensor Refresh Rate:** `#define SENSORS_EVERY_N_CYCLES 6` — Triggers temperature readings and e-Paper refresh every 6 light cycles (30 minutes).
+
+### 🌐 Multi-Language Strings
+
+Text labels displayed on the e-Paper screen can be customized or extended in `sys.h`:
+
+```cpp
+inline const char* airText[]   = {"ARIA", "AIR", "AIRE"};
+inline const char* waterText[] = {"ACQUA", "WATER", "AGUA"};
+inline const char* lowBatt[]   = {"Batteria Scarica", "Low Battery", "Batería baja"};
+
+---
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](../../issues) if you want to contribute or report a bug.
