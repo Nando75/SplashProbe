@@ -63,8 +63,8 @@ void loop() {
                     displayManager.UpdateScreen(
                         tempManager.getAirTemperature(),
                         tempManager.getWaterTemperature(),
-                        3.2, //batt.voltage,
-                        10 //batt.percentage
+                        batt.voltage,
+                        batt.percentage
                     );
 
                 } else {

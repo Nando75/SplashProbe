@@ -5,6 +5,7 @@ BatteryManager::BatteryManager() {
 
 void BatteryManager::begin() {}
 
+
 BatteryData BatteryManager::readBattery() {
     BatteryData data;
     // 1. Reading the actual no-load voltage
@@ -20,3 +21,5 @@ BatteryData BatteryManager::readBattery() {
     }
     return data;
 }
+
+
