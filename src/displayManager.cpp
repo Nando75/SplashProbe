@@ -1,12 +1,8 @@
 #include "DisplayManager.h"
-
-// Costruttore con lista di inizializzazione corretta:
 DisplayManager::DisplayManager() 
-    : epd2_driver(EDP_CS, EDP_DC, EDP_RST, EDP_BUSY),  // Inizializza il driver con i PIN
-      display(epd2_driver)                              // Passa l'istanza del driver al display
-{
-    // Eventuale codice aggiuntivo del costruttore
-}
+    : epd2_driver(EDP_CS, EDP_DC, EDP_RST, EDP_BUSY),
+      display(epd2_driver)
+{ }
 
 
 void DisplayManager::init() {
@@ -23,24 +19,20 @@ void DisplayManager::clear() {
 
 
 void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVoltage, int battPercentage) {
-    // Imposta la rotazione orizzontale (1 o 3 a seconda del senso in cui hai ruotato il display)
-    display.setRotation(1); 
     display.setFullWindow();
-
     int screenW = display.width();   // 250 px
     int screenH = display.height();  // 122 px
-
     int margin = 4;
     int gap = 4;
     int cornerRadius = 6;
 
-    // Dimensioni dei 3 Box affiancati
-    int boxH = screenH - (margin * 2); // 114 px di altezza per tutti i box
+    // Dimensions of the 3 boxes placed side by side
+    int boxH = screenH - (margin * 2); // 114 px height for all boxes
     
-    int boxW_batt = 44; // Box 3 (Batteria): più stretto sulla destra
-    int boxW_temp = (screenW - (margin * 2) - (gap * 2) - boxW_batt) / 2; // ~95 px ciascuno
+    int boxW_batt = 44; // Box 3 (Battery): narrower on the right
+    int boxW_temp = (screenW - (margin * 2) - (gap * 2) - boxW_batt) / 2; // ~95 px each
 
-    // Coordinate X d'inizio dei 3 box
+    // X coordinates of the start of the 3 boxes
     int x1 = margin;                            // AIR
     int x2 = x1 + boxW_temp + gap;              // WATER
     int x3 = x2 + boxW_temp + gap;              // BATTERY
@@ -51,43 +43,37 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
 
     display.firstPage();
     do {
-        // --- 0. SFONDO GENERALE NERO ---
+        // --- 0. GENERAL BLACK BACKGROUND ---
         display.fillScreen(GxEPD_BLACK);
 
         // ====================================================
-        // Lambda / Helper locale per formattare il valore °C
+        // Lambda / Local helper to format the °C value
         // ====================================================
         auto drawDegreeVal = [&](float tempVal, int boxX, int boxW) {
             String valStr = String(tempVal, 1);
+            if(tempVal==NAN) { valStr = "--,-"; }
             String cStr = (dataMode == Celsius) ? "C" : "F";
-
             display.setFont(&Seven_Segment20pt7b);
             display.setTextColor(GxEPD_BLACK);
-
-            // Calcolo ingombri
+            // Space calculation
             display.getTextBounds(valStr, 0, 0, &tbx, &tby, &tbw_num, &tbh_num);
             display.getTextBounds(cStr, 0, 0, &tbx, &tby, &tbw_c, &tbh_c);
-
             int circleRadius = 3; 
             int gap = 3;
-            
             int totalW = tbw_num + gap + (circleRadius * 2) + gap + tbw_c;
             int startX = boxX + (boxW - totalW) / 2;
-            int baseBaselineY = y + 70; // Posizionato bene in basso nel box
-
-            // 1. Numero
+            
+            int baseBaselineY = y + 70; // Positioned well down in the box
+            if(Lang == cn) baseBaselineY +=14;
+            // 1. Number
             display.setCursor(startX, baseBaselineY);
             display.print(valStr);
-
-            // 2. Cerchio Gradi
+            // 2. Circle Degrees
             int circleCenterX = startX + tbw_num + gap + circleRadius + 2;
             int circleCenterY = baseBaselineY - tbh_num + circleRadius + 4;
-
             display.drawCircle(circleCenterX, circleCenterY, circleRadius, GxEPD_BLACK);
             display.drawCircle(circleCenterX, circleCenterY, circleRadius - 1, GxEPD_BLACK);
-
-            // 3. Lettera 'C' o 'F'
-
+            // 3. Letter 'C' or 'F'
             int cX = circleCenterX + circleRadius + gap;
              display.setFont(&Seven_Segment7pt7b);
             display.setCursor(cX, baseBaselineY);
@@ -101,15 +87,30 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
         display.drawRoundRect(x1 + 2, y + 2, boxW_temp - 4, boxH - 4, cornerRadius - 1, GxEPD_BLACK);
         display.drawRoundRect(x1 + 3, y + 3, boxW_temp - 6, boxH - 6, cornerRadius - 2, GxEPD_BLACK);
 
-        // Titolo AIR
-        String airTitle = String(airText[Lang]);
-        display.setFont(&FreeSansBold9pt7b);
-        display.setTextColor(GxEPD_RED);
-        display.getTextBounds(airTitle, 0, 0, &tbx, &tby, &tbw_num, &tbh_num);
-        display.setCursor(x1 + (boxW_temp - tbw_num) / 2 - tbx, y + 25);
-        display.print(airTitle);
+        // Title AIR
+        if(Lang!=cn)
+        {
+            String airTitle = String(airText[Lang]);
+            display.setFont(&FreeSansBold9pt7b);
+            display.setTextColor(GxEPD_RED);
+            display.getTextBounds(airTitle, 0, 0, &tbx, &tby, &tbw_num, &tbh_num);
+            display.setCursor(x1 + (boxW_temp - tbw_num) / 2 - tbx, y + 25);
+            display.print(airTitle);
+        }
+        else
+        {
+            // CINESE: Larghezza bitmap AIR (es. 48px o la larghezza della tua bitmap)
+            int bmpW = epd_bitmap_air_cn_width; 
+            // Centratura orizzontale perfetta all'interno del Box 1 (x1)
+            int posX = x1 + (boxW_temp - bmpW) / 2;
+            int posY = y + 10; // offset Y dall'alto per la bitmap (aggiustare se necessario)
+    
+            drawAirLabel_CN(posX, posY);
+        }
+        
 
-        // Valore Temperatura
+
+        // Temperature value
         drawDegreeVal(airTemp, x1, boxW_temp);
 
         // ====================================================
@@ -119,19 +120,32 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
         display.drawRoundRect(x2 + 2, y + 2, boxW_temp - 4, boxH - 4, cornerRadius - 1, GxEPD_BLACK);
         display.drawRoundRect(x2 + 3, y + 3, boxW_temp - 6, boxH - 6, cornerRadius - 2, GxEPD_BLACK);
 
-        // Titolo WATER
-        String waterTitle = String(waterText[Lang]);
-        display.setFont(&FreeSansBold9pt7b);
-        display.setTextColor(GxEPD_RED);
-        display.getTextBounds(waterTitle, 0, 0, &tbx, &tby, &tbw_num, &tbh_num);
-        display.setCursor(x2 + (boxW_temp - tbw_num) / 2 - tbx, y + 25);
-        display.print(waterTitle);
-
-        // Valore Temperatura
+        // Title WATER
+        if(Lang!=cn)
+        {
+            String waterTitle = String(waterText[Lang]);
+            display.setFont(&FreeSansBold9pt7b);
+            display.setTextColor(GxEPD_RED);
+            display.getTextBounds(waterTitle, 0, 0, &tbx, &tby, &tbw_num, &tbh_num);
+            display.setCursor(x2 + (boxW_temp - tbw_num) / 2 - tbx, y + 25);
+            display.print(waterTitle);
+        }
+        else
+        {
+            // CINESE: Larghezza bitmap WATER (es. 24px o la larghezza della tua bitmap)
+                int bmpW = epd_bitmap_water_cn_width; 
+                
+                // Centratura orizzontale perfetta all'interno del Box 2 (x2)
+                int posX = x2 + (boxW_temp - bmpW) / 2;
+                int posY = y + 10; // offset Y dall'alto per la bitmap
+                
+                drawWaterLabel_CN(posX, posY);
+        }
+        // Temperature value
         drawDegreeVal(waterTemp, x2, boxW_temp);
 
         // ====================================================
-        // 3. BOX BATTERIA VERTICALE
+        // 3. VERTICAL BATTERY BOX
         // ====================================================
         battPercentage = constrain(battPercentage, 0, 100);
         uint16_t battBoxColor = (battPercentage <= 20) ? GxEPD_RED : GxEPD_BLACK;
@@ -140,23 +154,23 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
         display.drawRoundRect(x3 + 2, y + 2, boxW_batt - 4, boxH - 4, cornerRadius - 1, battBoxColor);
         display.drawRoundRect(x3 + 3, y + 3, boxW_batt - 6, boxH - 6, cornerRadius - 2, battBoxColor);
 
-        // --- ICONA BATTERIA VERTICALE ---
-        int batW = 20;  // Larghezza sagoma
-        int batH = 42;  // Altezza sagoma
-        int batPinH = 4; // Polo positivo in alto
+        // --- VERTICAL BATTERY ICON ---
+        int batW = 20;  // Shape width
+        int batH = 42;  // Shape height
+        int batPinH = 4; // Positive pole at the top
         
         int batX = x3 + (boxW_batt - batW) / 2;
         int batY = y + 12;
 
-        // Polo positivo (Punta in alto)
+        // Positive pole (Point up)
         display.fillRect(batX + (batW - 8) / 2, batY, 8, batPinH, GxEPD_BLACK);
         
-        // Corpo esterno batteria
+        // External battery body
         int bodyY = batY + batPinH;
         display.drawRect(batX, bodyY, batW, batH, GxEPD_BLACK);
         display.drawRect(batX + 1, bodyY + 1, batW - 2, batH - 2, GxEPD_BLACK);
 
-        // Segmenti Verticali (dal basso verso l'alto)
+        // Vertical Segments (from bottom to top)
         int activeSegments = (battPercentage + 10) / 25;
         activeSegments = constrain(activeSegments, 0, 4);
 
@@ -165,7 +179,7 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
         int segGap = 2;
 
         for (int i = 0; i < 4; i++) {
-            // i=0 è il segmento più in basso, i=3 quello più in alto
+            // i=0 is the lowest segment, i=3 is the highest
             int segX = batX + 3;
             int segY = bodyY + batH - 3 - (i + 1) * segH - (i * segGap);
 
@@ -177,7 +191,7 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
             }
         }
 
-        // --- SCRITTE PERC % E VOLT (Sotto la batteria) ---
+        // --- PERC % AND VOLT WRITTEN (Under the battery) ---
         float vVal = (battVoltage > 15.0f) ? (battVoltage / 1000.0f) : battVoltage;
         
         String pctStr = String(battPercentage) + "%";
@@ -186,51 +200,57 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
         display.setFont(&Seven_Segment7pt7b);
         display.setTextColor(battBoxColor);
 
-        // Percentuale (Centrata)
+        // Percentage (Centered)
         display.getTextBounds(pctStr, 0, 0, &tbx, &tby, &tbw_c, &tbh_c);
         display.setCursor(x3 + (boxW_batt - tbw_c) / 2 - tbx, bodyY + batH + 20);
         display.print(pctStr);
 
-        // Volt (Centrati sotto la percentuale)
+        // Volts (Centered under the percentage)
         display.getTextBounds(voltStr, 0, 0, &tbx, &tby, &tbw_c, &tbh_c);
         display.setCursor(x3 + (boxW_batt - tbw_c) / 2 - tbx, bodyY + batH + 38);
         display.print(voltStr);
 
         // ====================================================
-        // 4. BANNER LOW BATTERY (Se tensione <= 3.3V)
+        // 4. BANNER LOW BATTERY (If voltage <= 3.3V)
         // ====================================================
         if (vVal <= 3.3f) {
-            String lowBattMsg = String(lowBatt[Lang]);
-            int alertW = 150;  // Larghezza banner
-            int alertH = 22;   // Altezza banner
+            int alertW = 150;  // Banner width
+            int alertH = 28;   // Banner height
             int alertRadius = 5;
             
-            // Centrato orizzontalmente nell'area delle temperature (x1 e x2)
+            // Centered horizontally in the temperature area (x1 and x2)
             int alertX = x1 + ((x2 + boxW_temp - x1) - alertW) / 2;
-            int alertY = y + boxH - alertH - 10; // Posizionato in basso dentro i box
+            int alertY = y + boxH - alertH + 2; 
 
-            // Box nero principale
+            // Main black box
             display.fillRoundRect(alertX, alertY, alertW, alertH, alertRadius, GxEPD_BLACK);
             
-            // Bordi interni bianchi (doppio bordo)
+            // White inner edges (double edge)
             display.drawRoundRect(alertX + 1, alertY + 1, alertW - 2, alertH - 2, alertRadius - 1, GxEPD_WHITE);
             display.drawRoundRect(alertX + 2, alertY + 2, alertW - 4, alertH - 4, alertRadius - 2, GxEPD_WHITE);
 
-            // Testo BIANCO
-            display.setFont(&Seven_Segment7pt7b);
-            display.setTextColor(GxEPD_WHITE);
+            if(Lang!=cn)
+            {
+                // WHITE text
+                String lowBattMsg = String(lowBatt[Lang]);
+                display.setFont(&Seven_Segment7pt7b);
+                display.setTextColor(GxEPD_WHITE);
+                display.getTextBounds(lowBattMsg, 0, 0, &tbx, &tby, &tbw_c, &tbh_c);
+                // Centering the text in the banner
+                int textX = alertX + (alertW - tbw_c) / 2 - tbx;
+                int textY = alertY + (alertH - tbh_c) / 2 - tby;
+                display.setCursor(textX, textY);
+                display.print(lowBattMsg);
+            }
+            else
+            {
+                int textX = alertX + (alertW - tbw_c) / 2 - tbx;
+                int textY = alertY + (alertH - tbh_c) / 2 - tby;
+                drawLowBatteryLabel_CN(textX-28, textY-14);
+            }
 
-
-
-
-            display.getTextBounds(lowBattMsg, 0, 0, &tbx, &tby, &tbw_c, &tbh_c);
             
-            // Centratura del testo nel banner
-            int textX = alertX + (alertW - tbw_c) / 2 - tbx;
-            int textY = alertY + (alertH - tbh_c) / 2 - tby;
             
-            display.setCursor(textX, textY);
-            display.print(lowBattMsg);
         }
 
 
@@ -239,6 +259,27 @@ void DisplayManager::UpdateScreen(float airTemp, float waterTemp, float battVolt
 
     display.hibernate();
 }
+
+void DisplayManager::drawAirLabel_CN(int x, int y) {
+        // drawBitmap(x, y, bitmap, larghezza, altezza, colore)
+        display.drawBitmap(x, y, epd_bitmap_air_cn, epd_bitmap_air_cn_width, epd_bitmap_air_cn_height, GxEPD_RED);
+}
+
+void DisplayManager::drawWaterLabel_CN(int x, int y) {
+        display.drawBitmap(x, y, epd_bitmap_water_cn, epd_bitmap_water_cn_width, epd_bitmap_water_cn_height, GxEPD_RED);
+}
+
+void DisplayManager::drawLowBatteryLabel_CN(int x, int y) {
+        display.drawBitmap(
+            x, y, 
+            epd_bitmap_low_batt_cn, 
+            epd_bitmap_low_batt_cn_width, 
+            epd_bitmap_low_batt_cn_height, 
+            GxEPD_BLACK, 
+            GxEPD_WHITE
+        );
+}
+
 
 
 

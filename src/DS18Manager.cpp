@@ -5,12 +5,35 @@ DS18Manager::DS18Manager()
 {
 }
 
+
 void DS18Manager::begin()
 {
     _sensors.begin();
-    //findSensors();
+    //_sensors.setWaitForConversion(false); 
+    bool airPresent = _sensors.isConnected(_airSensor);
+    bool waterPresent = _sensors.isConnected(_waterSensor);
+    if (!airPresent || !waterPresent) {
+        if(debug) Serial.println("Sensor addresses not found, starting search...");
+        if(findSensors())
+        {
+            if(debug) printAddresses();
+        }
+        else
+        {
+            if(debug)
+            {
+                Serial.println(" ** No sensors detected. ** ");
+                Serial.println("Check the DS18B20 circuit:");
+                Serial.println("GND,3.3V,");
+                Serial.println("and pullup resistor between the data line and 3.3V to pin: 'GPIO0'");
+            } 
+        }
+    }
+
 
 }
+
+
 
 bool DS18Manager::isValidAddress(const DeviceAddress addr)
 {
@@ -25,57 +48,72 @@ bool DS18Manager::findSensors()
 {
     int count = _sensors.getDeviceCount();
     if (count < 2) return false;
-
-    // Trova i primi due sensori validi
     int found = 0;
     DeviceAddress addr;
-
     for (int i = 0; i < count; i++) {
         if (_sensors.getAddress(addr, i)) {
             if (isValidAddress(addr)) {
-                if (found == 0) memcpy(_airSensor, addr, 8);
-                if (found == 1) memcpy(_waterSensor, addr, 8);
+                if (found == 0) { 
+                    memcpy(_airSensor, addr, 8); 
+                    if(debug) Serial.println("Found " + getAddress(addr) + " assigned as Air Sensor." );
+                }
+                if (found == 1) { 
+                    memcpy(_waterSensor, addr, 8); 
+                    if(debug) Serial.println("Found " + getAddress(addr) + " assigned as Water Sensor." );
+                }
                 found++;
             }
         }
         if (found == 2) break;
     }
-
     return (found == 2);
 }
+
 
 void DS18Manager::updateData()
 {
     _sensors.requestTemperatures();
-    // Lettura aria
-    if (isValidAddress(_airSensor))
-        _tempAir = _sensors.getTempC(_airSensor);
-    else
-        _tempAir = NAN;
-    // Lettura acqua
-    if (isValidAddress(_waterSensor))
-        _tempWater = _sensors.getTempC(_waterSensor);
-    else
-        _tempWater = NAN;
 
+    if (isValidAddress(_airSensor) && _sensors.isConnected(_airSensor)) {
+        float temp = _sensors.getTempC(_airSensor);
+        _tempAir = (temp == DEVICE_DISCONNECTED_C) ? NAN : temp;
+    } else {
+        _tempAir = NAN;
+    }
+
+    if (isValidAddress(_waterSensor) && _sensors.isConnected(_waterSensor)) {
+        float temp = _sensors.getTempC(_waterSensor);
+        _tempWater = (temp == DEVICE_DISCONNECTED_C) ? NAN : temp;
+    } else {
+        _tempWater = NAN;
+    }
 }
 
 
 float DS18Manager::getAirTemperature() const
 {
-    float t = (dataMode == Farfahrenheit) ? toF(_tempAir + _airOffset) : _tempAir + _airOffset;
+    float t = (dataMode == Fahrenheit) ? toF(_tempAir + _airOffset) : _tempAir + _airOffset;
     return t;
 }
 
 float DS18Manager::getWaterTemperature() const
 {
-    float t = (dataMode == Farfahrenheit) ? toF(_tempWater + _waterOffset) : _tempWater + _waterOffset;
+    float t = (dataMode == Fahrenheit) ? toF(_tempWater + _waterOffset) : _tempWater + _waterOffset;
     return t;
 }
 
 
 float DS18Manager::toF(float c) const {
     return c * 1.8f + 32.0f;
+}
+
+String DS18Manager::getAddress(DeviceAddress sensor)
+{
+    char buf[24]; // 8 byte x 2 words + 7 spaces + '\0' = 24 chars
+    snprintf(buf, sizeof(buf), "%02X %02X %02X %02X %02X %02X %02X %02X",
+             sensor[0], sensor[1], sensor[2], sensor[3],
+             sensor[4], sensor[5], sensor[6], sensor[7]);
+    return String(buf);
 }
 
 
@@ -88,14 +126,13 @@ void DS18Manager::printAddresses() {
             Serial.print("Sensor ");
             Serial.print(i);
             Serial.print(": ");
-            for (int j = 0; j < 8; j++) {
-                Serial.print(addr[j], HEX);
-                Serial.print(" ");
-            }
+            Serial.print(getAddress(addr));
             Serial.println();
         }
     }
 }
+
+
 
 
 void DS18Manager::setAirSensor(const DeviceAddress addr) {

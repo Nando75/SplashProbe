@@ -3,7 +3,7 @@
 
 enum DataMode {
     Celsius,
-    Farfahrenheit
+    Fahrenheit
 };
 
 // Stati della Macchina a Stati
@@ -11,11 +11,13 @@ enum SystemState {
     STATE_READ_SENSORS,
     STATE_SLEEP
 };
+
 //translations
 typedef enum {
     it,
     en,
-    es
+    es,
+    cn
 } Language;
 
 
@@ -38,12 +40,12 @@ typedef enum {
 
 
 #define SENSORS_EVERY_N_CYCLES 6
-inline const uint32_t SLEEP_DURATION_MS = 5 * 60 * 1000UL; //un minuto
-//inline const uint32_t SLEEP_DURATION_MS = 30 * 1000UL; //mezzo minuto
+//inline const uint32_t SLEEP_DURATION_MS = 5 * 60 * 1000UL; //un minuto
+inline const uint32_t SLEEP_DURATION_MS = 5*60* 1000UL; //mezzo minuto
 
-inline Language Lang = it;
-inline DataMode dataMode = Celsius;
-inline bool debug = true;
+inline Language Lang = en;
+inline DataMode dataMode = Fahrenheit;
+inline bool debug = false;
 inline SystemState currentState = STATE_READ_SENSORS;
 inline const char* airText[] = {"ARIA", "AIR", "AIRE"};
 inline const char* waterText[] = {"ACQUA", "WATER", "AGUA"};

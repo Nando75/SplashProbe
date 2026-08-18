@@ -8,17 +8,17 @@ DeepSleepManager::DeepSleepManager() : inSleepMode(false) {
 
 void DeepSleepManager::begin() {
     pinMode(Vext, OUTPUT);
-    powerOnPeripherals(); // Attivo all'avvio
+    powerOnPeripherals(); // Active at startup
     TimerInit(&sleepTimer, DeepSleepManager::onSleepTimerEndCallback);
 }
 
 void DeepSleepManager::powerOnPeripherals() {
-    digitalWrite(Vext, LOW); // LOW = Alimentazione attiva su Vext
-    delay(10);               // Stabilizzazione alimentazione
+    digitalWrite(Vext, LOW); // LOW = Power on Vext
+    delay(10);               // Power Stabilization
 }
 
 void DeepSleepManager::powerOffPeripherals() {
-    digitalWrite(Vext, HIGH); // HIGH = Periferiche spente
+    digitalWrite(Vext, HIGH); // HIGH = Peripherals off
 }
 
 void DeepSleepManager::onSleepTimerEndCallback() {
@@ -28,19 +28,19 @@ void DeepSleepManager::onSleepTimerEndCallback() {
 }
 
 void DeepSleepManager::sleepForMillis(uint32_t durationMs) {
-    // Spegne la seriale prima dello sleep
+    // Turn off the serial port before sleep
     Serial.flush();
-    // Configura e avvia il timer RTC
+    // Configure and start the RTC timer
     TimerSetValue(&sleepTimer, durationMs);
     TimerStart(&sleepTimer);
     inSleepMode = true;
     powerOffPeripherals();
-    // Blocco in deep sleep finché il timer non scade
+    // Deep sleep block until the timer expires
     while (inSleepMode) {
-        lowPowerHandler(); // Entra nel sleep profondo di CubeCell
+        lowPowerHandler(); // Enter CubeCell's deep sleep
     }
 
-    // Risveglio: riattiva l'alimentazione Vext
+    // Awakening: Reactivates Vext power
     powerOnPeripherals();
 }
 

@@ -21,7 +21,7 @@ private:
     DallasTemperature _sensors;
     /*
         DS18B20 found:
-        Sensor 0: 28 5E C7 61 54 22 8 38 
+        Sensor 0: 28 5E C7 61 54 22 8 3 8 
         Sensor 1: 28 21 FA 97 54 22 8 94
     */
     DeviceAddress _airSensor = {0x28, 0x5E, 0xC7, 0x61, 0x54, 0x22, 0x08, 0x38};
@@ -29,6 +29,7 @@ private:
     
     float _tempAir = NAN;
     float _tempWater = NAN;
+    String getAddress(DeviceAddress sensor);
     bool findSensors();
     bool isValidAddress(const DeviceAddress addr);
     float toF(float c) const;

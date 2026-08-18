@@ -16,20 +16,19 @@ public:
     void clearAll();
 
     // ==========================================
-    // CONTROLLO LED SCHEDA (GPIO4)
+    // LED ON BOARD (GPIO4)
     // ==========================================
     void setBoardColor(uint8_t r, uint8_t g, uint8_t b);
     void clearBoard();
     void doubleFlash(uint8_t r = 255, uint8_t g = 255, uint8_t b = 255, uint16_t onDurationMs = 100, uint16_t offDurationMs = 100);
 
     // ==========================================
-    // CONTROLLO RING ESTERNO (SDA)
+    // NEOPIXEL RING external (SDA)
     // ==========================================
     void setRingColor(uint8_t r, uint8_t g, uint8_t b);
     void setRingPixel(uint8_t index, uint8_t r, uint8_t g, uint8_t b);
     void clearRing();
-    
-    // Giochi di luce per il Ring
+        
     void ringSpin(uint8_t r, uint8_t g, uint8_t b, uint16_t speedMs = 40, uint8_t cycles = 1);
 };
 
