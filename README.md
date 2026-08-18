@@ -5,12 +5,24 @@
 **Splash Probe** is an open-source, floating smart sensor designed for swimming pools. It measures both ambient outdoor air temperature and water temperature while adding an aesthetic touch with customizable underwater light effects.
 
 ---
+<p align="center">
+  <img src="docs/SpashProbe4.png" alt="Splash Probe Schematic / Breadboard" width="600">
+</p>
 
+---
 <p align="center">
   <img src="docs/Circuit.png" alt="Splash Probe Schematic / Breadboard" width="600">
 </p>
 
 ---
+<p align="center">
+  <img src="docs/SpashProbe5.png" alt="Splash Probe Schematic / Breadboard" width="600">
+</p>
+---
+
+
+
+
 
 ## ✨ Features
 
@@ -104,6 +116,12 @@ inline const char* airText[]   = {"ARIA", "AIR", "AIRE"};
 inline const char* waterText[] = {"ACQUA", "WATER", "AGUA"};
 inline const char* lowBatt[]   = {"Batteria Scarica", "Low Battery", "Batería baja"};
 ```
+---
+<p align="center">
+  <img src="docs/SpashProbe6.png" alt="Splash Probe Schematic / Breadboard" width="600">
+</p>
+
+
 ---
 
 ## 🤝 Contributing
