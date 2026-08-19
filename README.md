@@ -84,7 +84,7 @@ The 3D printable enclosure is designed to be fully buoyant and watertight.
 👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/models/3191750-splash-probe#profileId-3610961)**
 
 <p align="center">
-  <img src="docs/Cover4-3.png" alt="3D Model Render" width="500">
+  <img src="docs/Cover4-3.png" alt="3D Model Render" width="600">
 </p>
 
 ---
