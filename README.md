@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/SpashProbe2.png" alt="Splash Probe Device" width="600">
+  <img src="docs/Cover4-3.png" alt="Splash Probe Device" width="600">
 </p>
 
 **Splash Probe** is an open-source, floating smart sensor designed for swimming pools. It measures both ambient outdoor air temperature and water temperature while adding an aesthetic touch with customizable underwater light effects.
@@ -81,10 +81,10 @@ Follow these step-by-step guides to build your own Splash Probe:
 
 The 3D printable enclosure is designed to be fully buoyant and watertight.
 
-👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/models/3191750-splash-probe#profileId-3610961)**
+👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/search/models?keyword=Splash%20Probe)** *(replace with your actual link)*
 
 <p align="center">
-  <img src="docs/Cover4-3.png" alt="3D Model Render" width="600">
+  <img src="docs/3d-model-render.png" alt="3D Model Render" width="500">
 </p>
 
 ---
@@ -118,7 +118,7 @@ inline const char* lowBatt[]   = {"Batteria Scarica", "Low Battery", "Batería b
 ```
 ---
 <p align="center">
-  <img src="docs/SpashProbe6.png" alt="Splash Probe Schematic / Breadboard" width="600">
+  <img src="docs/SpashProbe5.png" alt="Splash Probe Schematic / Breadboard" width="600">
 </p>
 
 
