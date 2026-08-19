@@ -58,7 +58,7 @@ Follow these step-by-step guides to build your own Splash Probe:
 
 [ASSEMBLY INFO](./docs/SplashProbeAssembly_EN.pdf)
 
-[GUIDA ASSEMBLAGGIO](./docs/SplashProbeAssembly_EN.pdf)
+[GUIDA ASSEMBLAGGIO](./docs/SplashProbeAssembly_IT.pdf)
 
 ---
 
@@ -98,6 +98,11 @@ inline const char* airText[]   = {"ARIA", "AIR", "AIRE"};
 inline const char* waterText[] = {"ACQUA", "WATER", "AGUA"};
 inline const char* lowBatt[]   = {"Batteria Scarica", "Low Battery", "Batería baja"};
 ```
+
+<p align="center">
+  <img src="docs/SpashProbe6.png" alt="Splash Probe Schematic / Breadboard" width="600">
+</p>
+
 ---
 <p align="center">
   <img src="docs/SpashProbe5.png" alt="Splash Probe Schematic / Breadboard" width="600">
