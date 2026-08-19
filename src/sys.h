@@ -39,7 +39,7 @@ typedef enum {
 #define RING_LEDS_NUM   12
 
 
-#define SENSORS_EVERY_N_CYCLES 6
+#define SENSORS_EVERY_N_CYCLES 30
 //inline const uint32_t SLEEP_DURATION_MS = 5 * 60 * 1000UL;//Five minuts
 inline const uint32_t SLEEP_DURATION_MS = 2 * 1000UL;
 

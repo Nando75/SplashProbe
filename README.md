@@ -66,7 +66,7 @@ Follow these step-by-step guides to build your own Splash Probe:
 
 The 3D printable enclosure is designed to be fully buoyant and watertight.
 
-👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/search/models?keyword=Splash%20Probe)** 
+👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/models/3191750-splash-probe#profileId-3610961)** 
 
 
 ---
