@@ -40,10 +40,10 @@ typedef enum {
 
 
 #define SENSORS_EVERY_N_CYCLES 6
-inline const uint32_t SLEEP_DURATION_MS = 5 * 60 * 1000UL;//Five minuts
-//inline const uint32_t SLEEP_DURATION_MS = 2 * 1000UL;
+//inline const uint32_t SLEEP_DURATION_MS = 5 * 60 * 1000UL;//Five minuts
+inline const uint32_t SLEEP_DURATION_MS = 2 * 1000UL;
 
-inline Language Lang = cn;
+inline Language Lang = it;
 inline DataMode dataMode = Celsius;
 inline bool debug = false;
 inline SystemState currentState = STATE_READ_SENSORS;
