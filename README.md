@@ -6,22 +6,8 @@
 
 ---
 <p align="center">
-  <img src="docs/SpashProbe4.png" alt="Splash Probe Schematic / Breadboard" width="600">
-</p>
-
----
-<p align="center">
   <img src="docs/Circuit.png" alt="Splash Probe Schematic / Breadboard" width="600">
 </p>
-
----
-<p align="center">
-  <img src="docs/SpashProbe5.png" alt="Splash Probe Schematic / Breadboard" width="600">
-</p>
----
-
-
-
 
 
 ## ✨ Features
@@ -70,10 +56,9 @@ To maximize battery efficiency, the device operates on a timed deep-sleep schedu
 
 Follow these step-by-step guides to build your own Splash Probe:
 
-1. **[Bill of Materials (BOM)](docs/BOM.md):** Complete list of hardware components, tools, and materials needed.
-2. **[3D Printing & Post-Processing Guide](docs/WATERPROOFING.md):** Printing settings, surface treatment, and waterproofing/sealing instructions for the printed enclosure.
-3. **[Circuit & Wiring Diagram](docs/CIRCUIT.md):** Detailed wiring instructions, schematics, and pinout diagrams.
-4. **[Source Code & Flashing Guide](docs/FIRMWARE.md):** Information on setting up the environment, configuring the code, and flashing the CubeCell board.
+[ASSEMBLY INFO](./docs/SplashProbeAssembly_EN.pdf)
+
+[GUIDA ASSEMBLAGGIO](./docs/SplashProbeAssembly_EN.pdf)
 
 ---
 
@@ -81,11 +66,8 @@ Follow these step-by-step guides to build your own Splash Probe:
 
 The 3D printable enclosure is designed to be fully buoyant and watertight.
 
-👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/search/models?keyword=Splash%20Probe)** *(replace with your actual link)*
+👉 **[Download 3D Models on MakerWorld](https://makerworld.com/en/search/models?keyword=Splash%20Probe)** 
 
-<p align="center">
-  <img src="docs/3d-model-render.png" alt="3D Model Render" width="500">
-</p>
 
 ---
 
